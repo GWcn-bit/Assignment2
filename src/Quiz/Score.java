@@ -8,15 +8,16 @@ package Quiz;
  *
  * @author 16478
  */
-public class Score {
-    private int points = 0;
-    
-    public Score(int startPoints){
-       points = startPoints; 
+class Score extends Question {
+    private int points;
+
+    public Score(String t) {
+        super(t);
+        points = 0;
     }
-    
-    public void addPoints(int p){
-      points += p;  
+
+    public void addPoints(int p) {
+        points += p;
     }
     public int getPoints() {
         return points;

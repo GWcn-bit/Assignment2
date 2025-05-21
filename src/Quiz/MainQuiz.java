@@ -4,11 +4,16 @@
  */
 package Quiz;
 
+import menu.Main;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 16478
  */
 public class MainQuiz extends javax.swing.JFrame {
+        QuizManager manager = new QuizManager("Quiz");
+        int currentIndex = 0;
 
     /**
      * Creates new form MainQuestion
@@ -16,6 +21,16 @@ public class MainQuiz extends javax.swing.JFrame {
     public MainQuiz() {
         initComponents();
     }
+
+    private Tips getTipsByLevel(String level) {
+    if ("Low".equals(level)) {
+        return new LowTips();
+    } else if ("Medium".equals(level)) {
+        return new MediumTips();
+    } else {
+        return new HighTips();
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,16 +49,27 @@ public class MainQuiz extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("STAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Question:");
 
         jLabel2.setText("Enter number:");
 
         jButton2.setText("SUB");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Score:");
 
@@ -51,24 +77,39 @@ public class MainQuiz extends javax.swing.JFrame {
 
         jLabel5.setText("Notes: Enter number 0-5, 0 is noing, 5 is strong");
 
+        jButton3.setText("HOME");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jButton2)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(108, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton1)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(135, 135, 135)
+                                .addComponent(jButton3)))
+                        .addGap(0, 83, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,11 +130,64 @@ public class MainQuiz extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(34, 34, 34)
                 .addComponent(jLabel4)
-                .addContainerGap(227, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addGap(108, 108, 108))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        // 点了“STAR”按钮
+    manager.loadQuestions("Question.txt"); // 加载题目
+    currentIndex = 0;
+    Question q = manager.questions[currentIndex];
+    if (q != null) {
+        jLabel1.setText(q.getText()); // 显示问题
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        // 点了“SUB”按钮
+    String input = jTextField1.getText();
+    int ans;
+    try {
+        ans = Integer.parseInt(input);
+        if (ans < 0 || ans > 5) {
+            throw new NumberFormatException();
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "请输 0 到 5 的数字");
+        return;
+    }
+
+    RankingQues q = (RankingQues) manager.questions[currentIndex];
+    q.setRank(ans); // 设置当前题目的分数
+    manager.score.addPoints(ans); // 加到总分里
+
+    currentIndex++;
+    if (currentIndex < manager.questions.length && manager.questions[currentIndex] != null) {
+        jLabel1.setText(manager.questions[currentIndex].getText()); // 下一个问题
+        jTextField1.setText(""); // 清空输入框
+    } else {
+        int total = manager.score.getPoints();
+        jLabel3.setText("Score: " + total); // 显示得分
+
+        String level = manager.score.getRiskLevel(); // 算等级
+        Tips tips = getTipsByLevel(level);
+        String tipMessage = getTipMessage(tips);
+        jLabel4.setText("Tips: " + tipMessage); // 显示提示
+    }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+      this.setVisible(false);
+      new Main().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -134,6 +228,7 @@ public class MainQuiz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -141,4 +236,17 @@ public class MainQuiz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+    
+    //Debug form chatgpt
+    private String getTipMessage(Tips tips) {
+    if (tips instanceof LowTips) {
+        return "You're doing great! Keep healthy habits!";
+    } else if (tips instanceof MediumTips) {
+        return "Try taking 10-minute breaks every hour.";
+    } else if (tips instanceof HighTips) {
+        return "Please talk to someone or reduce screen time!";
+    } else {
+        return "Try to use screens in a balanced way.";
+    }
+    }
 }

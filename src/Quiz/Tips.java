@@ -8,29 +8,41 @@ package Quiz;
  *
  * @author 16478
  */
-public class Tips {
+class Tips extends Question {
+    public Tips(String t) {
+        super(t);
+    }
     public void showTips() {
         System.out.println("Try to use screens in a balanced way.");       
-    }   
+    } 
 }
-
-class LowTips extends Tips{
-    @Override
-    public void showTips() {
-        System.out.println("You're doing great! Keep healthy habits!");
+class LowTips extends Tips {
+    public LowTips() {
+        super("Low Tip"); 
+    }           
+    public String getTipMessage() {
+        return "You're doing great! Keep healthy habits!";
     }
 }
 
 class MediumTips extends Tips {
-    @Override
-    public void showTips() {
-        System.out.println("Try taking 10-minute breaks every hour.");
-    }   
-}
+    public MediumTips() {
+        super("Medium Tip");
+    }
 
-class HighTips extends Tips{
-    @Override
-    public void showTips() {
-        System.out.println("Please talk to someone or reduce screen time ASAP!");
+    public String getTipMessage() {
+        return "Try taking 10-minute breaks every hour.";
     }
 }
+
+class HighTips extends Tips {
+    public HighTips() {
+        super("High Tip");
+    }
+    public String getTipMessage() {
+        return "Please talk to someone or reduce screen time!";
+    }
+}
+
+
+
