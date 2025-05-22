@@ -12,7 +12,9 @@ import javax.swing.JOptionPane;
  * @author 16478
  */
 public class MainQuiz extends javax.swing.JFrame {
+        //Manages the list of questions and the score
         QuizManager manager = new QuizManager("Quiz");
+        //Index of the current question being shown
         int currentIndex = 0;
 
     /**
@@ -22,6 +24,12 @@ public class MainQuiz extends javax.swing.JFrame {
         initComponents();
     }
 
+    /**
+     * Choose the right Tips class based on risk level string.
+     *
+     * @param level the risk level ("Low", "Medium", or other)
+     * @return a Tips object to give advice for that level
+     */
     private Tips getTipsByLevel(String level) {
     if ("Low".equals(level)) {
         return new LowTips();
@@ -140,46 +148,55 @@ public class MainQuiz extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        // 点了“STAR”按钮
-    manager.loadQuestions("Question.txt"); // 加载题目
+        // Load questions from "Question.txt"
+    manager.loadQuestions("Question.txt");
     currentIndex = 0;
+    
+    // Get and show the first question
     Question q = manager.questions[currentIndex];
     if (q != null) {
-        jLabel1.setText(q.getText()); // 显示问题
+        jLabel1.setText(q.getText()); 
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        // 点了“SUB”按钮
     String input = jTextField1.getText();
     int ans;
+    
+    // Try to parse a valid integer between 0 and 5
     try {
         ans = Integer.parseInt(input);
         if (ans < 0 || ans > 5) {
             throw new NumberFormatException();
         }
     } catch (NumberFormatException e) {
+        
+        // Show error if input is not valid
         JOptionPane.showMessageDialog(this, "请输 0 到 5 的数字");
         return;
     }
-
+    
+    // Save the answer for this ranking question
     RankingQues q = (RankingQues) manager.questions[currentIndex];
-    q.setRank(ans); // 设置当前题目的分数
-    manager.score.addPoints(ans); // 加到总分里
+    q.setRank(ans); 
+    manager.score.addPoints(ans); // Add points to total score
 
     currentIndex++;
+    // If there is another question, show it
     if (currentIndex < manager.questions.length && manager.questions[currentIndex] != null) {
-        jLabel1.setText(manager.questions[currentIndex].getText()); // 下一个问题
-        jTextField1.setText(""); // 清空输入框
+        jLabel1.setText(manager.questions[currentIndex].getText());
+        jTextField1.setText(""); // clear input box
     } else {
+        // No more questions: show final score
         int total = manager.score.getPoints();
-        jLabel3.setText("Score: " + total); // 显示得分
-
-        String level = manager.score.getRiskLevel(); // 算等级
+        jLabel3.setText("Score: " + total); 
+        
+        // Calculate risk level and show tips
+        String level = manager.score.getRiskLevel();
         Tips tips = getTipsByLevel(level);
         String tipMessage = getTipMessage(tips);
-        jLabel4.setText("Tips: " + tipMessage); // 显示提示
+        jLabel4.setText("Tips: " + tipMessage);
     }
     }//GEN-LAST:event_jButton2ActionPerformed
 

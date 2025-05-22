@@ -14,6 +14,9 @@ import javax.swing.JOptionPane;
  * @author 16478
  */
 public class MainUI extends javax.swing.JFrame {
+    /**
+     * Array to hold UserActivity for each day of the week.
+     */
     private UserActivity[] users = new UserActivity[7];
 
     /**
@@ -23,9 +26,10 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
         String[] days = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
         for (int i = 0; i < 7; i++) {
-        UserActivity user = new UserActivity(days[i], 0, 0); // ✅ 使用星期作为名字
+        // Create a UserActivity named by the weekday, with zero hours
+        UserActivity user = new UserActivity(days[i], 0, 0); 
         users[i] = user;
-        jComboBox1.addItem(user);
+        jComboBox1.addItem(user);// Add to dropdown
 }
 
         
@@ -132,6 +136,7 @@ public class MainUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+            
             UserActivity u = (UserActivity) jComboBox1.getSelectedItem();
             jTextField1.setText(String.valueOf(u.getScreenHours()));
             jTextField2.setText(String.valueOf(u.getSleepHours()));
@@ -145,12 +150,14 @@ public class MainUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         UserActivity u = (UserActivity) jComboBox1.getSelectedItem();
 try {
+    //// Read numbers from text fields
     double screen = Double.parseDouble(jTextField1.getText().trim());
     double sleep = Double.parseDouble(jTextField2.getText().trim());
+    // Update values in the selected UserActivity
     u.setScreenHours(screen);
     u.setSleepHours(sleep);
-    jComboBox1.repaint(); // 更新显示
-    saveToFile();
+    jComboBox1.repaint();// Refresh display in dropdown 
+    saveToFile();// Write all data to file
 } catch (NumberFormatException e) {
     JOptionPane.showMessageDialog(this, "Enter valid numbers.");
 }
@@ -161,7 +168,8 @@ try {
         this.setVisible(false);
         new Main().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
+    //Save all UserActivity items to "SS.txt" in CSV format.
     private void saveToFile() {
     try (PrintWriter pw = new PrintWriter("SS.txt")) {
         for (int i = 0; i < jComboBox1.getItemCount(); i++) {
