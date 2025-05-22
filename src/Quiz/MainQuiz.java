@@ -190,7 +190,7 @@ public class MainQuiz extends javax.swing.JFrame {
     } else {
         // No more questions: show final score
         int total = manager.score.getPoints();
-        jLabel3.setText("Score: " + total); 
+        jLabel3.setText("All users score: " + Score.getTotalAllScores()); 
         
         // Calculate risk level and show tips
         String level = manager.score.getRiskLevel();

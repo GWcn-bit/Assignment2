@@ -25,7 +25,8 @@ public class QuizManager extends Question {
     /**
      * Score object to track total points.
      */
-    Score score = new Score("Your Score");
+    Score score = new Score();
+
     /**
      * Holds the advice tips based on risk level.
      */

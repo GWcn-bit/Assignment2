@@ -13,7 +13,7 @@ public class Question {
     /**
      * The text of the question shown to the user.
      */
-    private String questionText;
+    private final String questionText;
     
     /**
      * Create a new Question with the given text.

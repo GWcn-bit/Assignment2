@@ -18,6 +18,7 @@ public class MainUI extends javax.swing.JFrame {
      * Array to hold UserActivity for each day of the week.
      */
     private UserActivity[] users = new UserActivity[7];
+    private static final String DATA_FILE = "SS.txt";
 
     /**
      * Creates new form MainUI

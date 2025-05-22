@@ -8,57 +8,37 @@ package Quiz;
  *
  * @author 16478
  */
-class Score extends Question {
+public class Score extends Question {
+    public Score() {
+        super(""); 
+    }
     
     /**
      * The accumulated total points from all answered questions.
      */
-    private int points;
+    private int totalPoints = 0; // Each user's score
+    private static int totalAllScores = 0; // All users' total score
 
-    /**
-     * Create a Score object with a title and start points at zero.
-     *
-     * @param t the title or label for this score tracker
-     */
-    public Score(String t) {
-        // Call parent constructor to store the title text
-        super(t);
-         // Initialize points to zero
-        points = 0;
+    public void addPoints(int points) {
+        totalPoints += points;
+        totalAllScores += points;
     }
 
-    /**
-     * Add more points to the total.
-     *
-     * @param p the number of points to add
-     */
-    public void addPoints(int p) {
-        // Increase points by the given value
-        points += p;
-    }
-    
-    /**
-     * Get the current total of points.
-     *
-     * @return the total points so far
-     */
     public int getPoints() {
-        // Return the stored points
-        return points;
+        return totalPoints;
     }
-    
+
+    public String getRiskLevel() {
+        if (totalPoints < 20) return "Low";
+        else if (totalPoints < 35) return "Medium";
+        else return "High";
+    }
+
     /**
-     * Determine the risk level based on the total points.
-     *
-     * @return "Low", "Medium", or "High" risk level
+     * Static method to return  score total.
+     * Called in MainQuiz.java
      */
-    public String getRiskLevel(){
-        if(points<=40){
-            return"Low";
-        }else if(points <= 69){
-            return "Medium";            
-        }else{
-            return "High";
-        }        
-    }    
-}
+    public static int getTotalAllScores() {
+        return totalAllScores;
+    }
+} 
