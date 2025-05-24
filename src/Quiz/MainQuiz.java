@@ -173,7 +173,7 @@ public class MainQuiz extends javax.swing.JFrame {
     } catch (NumberFormatException e) {
         
         // Show error if input is not valid
-        JOptionPane.showMessageDialog(this, "请输 0 到 5 的数字");
+        JOptionPane.showMessageDialog(this, "Please enter a number from 0 to 5");
         return;
     }
     
